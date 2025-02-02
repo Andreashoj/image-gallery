@@ -1,8 +1,8 @@
-[build]
-  command = "npm run build && npm run serve:ssr:frontend"
-  publish = "dist/frontend"
+# [build]
+#   command = "npm run build"
+#   publish = "dist/frontend/browser"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200

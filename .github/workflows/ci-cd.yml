@@ -42,12 +42,12 @@ jobs:
       - name: Build
         run: |
           cd ./frontend
-          npm run build
+          npm run build && npm run build:ssr
           
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
-          publish-dir: './frontend/dist/frontend'  # Adjust this path to your build output
+          publish-dir: './frontend/dist/frontend/browser'  # Adjust this path to your build output
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"

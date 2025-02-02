@@ -17,22 +17,22 @@ jobs:
 
       - name: Restore dependencies
         run: 
-          cd ./backend  
+          cd ./backend &&
           dotnet restore
 
       - name: Build
         run: 
-          cd ./backend
+          cd ./backend &&
           dotnet build --no-restore
 
       - name: Test
         run: 
-          cd ./backend
+          cd ./backend &&
           dotnet test --no-build --verbosity normal
 
       - name: Publish
         run: 
-          cd ./backend
+          cd ./backend &&
           dotnet publish -c Release -o ./publish
       
       - name: Build and deploy to Azure

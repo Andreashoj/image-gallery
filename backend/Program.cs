@@ -10,6 +10,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<GalleryContext>();
 
+// Add detailed error logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,11 +24,21 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-using (var scope = app.Services.CreateScope())
+// Add this around your database migration code
+try
 {
-    var context = scope.ServiceProvider.GetRequiredService<GalleryContext>();
-    await context.Database.MigrateAsync();
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<GalleryContext>();
+        await context.Database.MigrateAsync();
+    }
 }
+catch (Exception ex)
+{
+    app.Logger.LogError(ex, "An error occurred during migration");
+    throw; // This will help us see the actual error
+}
+
 app.MapHealthChecks("/health");
 app.MapGet("/test-connection", async (GalleryContext context) =>
 {
